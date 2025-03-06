@@ -65,12 +65,6 @@ struct MenuBarView: View {
                 "Could not capture screen. Error: \(error.localizedDescription)"
             )
         }
-        
-        guard NSPasteboard.general
-            .canReadItem(withDataConformingToTypes: NSImage.imageTypes) else { return }
-        
-        guard let image = NSImage(pasteboard: NSPasteboard.general) else { return }
-        self.image = image
     }
     
     private func getImageFromPasteboard() {
