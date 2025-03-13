@@ -11,8 +11,12 @@ import SwiftData
 @main
 struct ShutterMacApp: App {
     var body: some Scene {
-        MenuBarExtra("ShutterMac App", systemImage: "sparkles") {
+        MenuBarExtra {
             MenuBarView()
+        } label: {
+            Image("MenuIcon")
+                .resizable()
+                .frame(width: 24, height: 24)
         }
         .menuBarExtraStyle(.window)
     }
