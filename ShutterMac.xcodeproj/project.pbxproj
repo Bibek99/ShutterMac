@@ -29,9 +29,22 @@
 		A6B93BFD2D796D8A00312A79 /* ShutterMacUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShutterMacUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A6D7882D2D82848B001D726F /* Exceptions for "ShutterMac" folder in "ShutterMac" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A6B93BDF2D796D8800312A79 /* ShutterMac */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A6B93BE22D796D8800312A79 /* ShutterMac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A6D7882D2D82848B001D726F /* Exceptions for "ShutterMac" folder in "ShutterMac" target */,
+			);
 			path = ShutterMac;
 			sourceTree = "<group>";
 		};
@@ -399,12 +412,14 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShutterMac/Preview Content\"";
-				DEVELOPMENT_TEAM = WZ3THJ9MC8;
+				DEVELOPMENT_TEAM = YWPS7BC5UL;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShutterMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShutterMac;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -431,12 +446,14 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ShutterMac/Preview Content\"";
-				DEVELOPMENT_TEAM = WZ3THJ9MC8;
+				DEVELOPMENT_TEAM = YWPS7BC5UL;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShutterMac/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShutterMac;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
