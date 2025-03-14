@@ -28,7 +28,7 @@ jobs:
   build-app:
     name: Build Mac App
     needs: [increment-build-number]
-    runs-on: macos-15-xlarge
+    runs-on: macos-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.2.app/Contents/Developer
       XCODE_16_DEVELOPER_DIR: /Applications/Xcode_16.2.app/Contents/Developer
