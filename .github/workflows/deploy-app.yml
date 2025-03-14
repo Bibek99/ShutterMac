@@ -51,7 +51,7 @@ jobs:
         run: |
           npm install -g create-dmg
           gem install fastlane
-          export BUILD=$(curl --header "Authorization: token $PERSONAL_ACCESS_TOKEN" https://raw.githubusercontent.com/Bibek99/app-secrets/shuttermac/build.txt | cat)
+          export BUILD=$(curl --header "Authorization: token $PERSONAL_ACCESS_TOKEN" https://raw.githubusercontent.com/Bibek99/app-secrets/refs/heads/master/shuttermac/build.txt | cat)
           export VERSION=$(cat version.txt)
           ./scripts/setup.sh
           cat ShutterMac/Config.xcconfig
@@ -60,11 +60,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Tag name
-        run: /
+        run: |
           appVersion=$(cat version.txt)
           echo "TAG=${appVersion}" >> $GITHUB_ENV
       - name: Create release and tag
-        run: /
+        run: |
           gh release create ${{ env.TAG }} /User/runner/work/ShutterMac/ShutterMac/build/*.dmg --target main --generate-notes --fail-on-no-commits
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
