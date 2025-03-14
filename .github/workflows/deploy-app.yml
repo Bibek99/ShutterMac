@@ -65,6 +65,6 @@ jobs:
           echo "TAG=${appVersion}" >> $GITHUB_ENV
       - name: Create release and tag
         run: |
-          gh release create ${{ env.TAG }} /User/runner/work/ShutterMac/ShutterMac/build/*.dmg --target main --generate-notes
+          gh release create ${{ env.TAG }} /Users/runner/work/ShutterMac/ShutterMac/build/*.dmg --target main --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
