@@ -49,6 +49,7 @@ struct MenuBarView: View {
                         let provider = NSItemProvider(contentsOf: imageURL)!
                         return provider
                     }
+                    .padding(.horizontal)
             }
             
             HStack {
