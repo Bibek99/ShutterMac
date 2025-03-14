@@ -1,4 +1,4 @@
-name: Build and upload assets to callbreak-pixi
+name: Build and upload assets to ShutterMac
 
 on:
   issue_comment:
