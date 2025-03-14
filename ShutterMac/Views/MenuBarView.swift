@@ -53,10 +53,14 @@ struct MenuBarView: View {
             
             HStack {
                 Button {
+                    NSApplication.shared.hide(nil)
                     takeScreenShot(type: .area)
+                    NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "rectangle.dashed") }
                 Button {
+                    NSApplication.shared.hide(nil)
                     takeScreenShot(type: .window)
+                    NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "macwindow") }
                 Button {
                     takeScreenShot(type: .full)
