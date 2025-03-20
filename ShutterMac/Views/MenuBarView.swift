@@ -9,11 +9,13 @@ import Foundation
 import SwiftUI
 
 struct MenuBarView: View {
-    @State private var imageURL: URL? = nil
+    @ObservedObject var screenCapture: ScreenCapture
     
     var body: some View {
         VStack {
-            if let imageURL = imageURL, let image = NSImage(contentsOfFile: imageURL.path) {
+            if let imageURL = screenCapture.imageURL, let image = NSImage(
+                contentsOfFile: imageURL.path
+            ) {
                 Image(nsImage: image)
                     .resizable()
                     .scaledToFit()
@@ -26,24 +28,20 @@ struct MenuBarView: View {
             
             HStack {
                 Button {
+                    screenCapture.captureFull()
+                } label: { Image(systemName: "desktopcomputer") }
+                
+                Button {
                     NSApplication.shared.hide(nil)
-                    takeScreenShot(type: .area) { imageURL in
-                        updateimageURL(imageURL)
-                    }
+                    screenCapture.captureArea()
                     NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "rectangle.dashed") }
+                
                 Button {
                     NSApplication.shared.hide(nil)
-                    takeScreenShot(type: .window) { imageURL in
-                        updateimageURL(imageURL)
-                    }
+                    screenCapture.captureWindow()
                     NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "macwindow") }
-                Button {
-                    takeScreenShot(type: .full) { imageURL in
-                        updateimageURL(imageURL)
-                    }
-                } label: { Image(systemName: "desktopcomputer") }
             }
             .padding(.horizontal)
             
@@ -55,9 +53,5 @@ struct MenuBarView: View {
             .padding(.top)
         }
         .padding(.vertical)
-    }
-    
-    private func updateimageURL(_ url: URL?) {
-        imageURL = url
     }
 }
