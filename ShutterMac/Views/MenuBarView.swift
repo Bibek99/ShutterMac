@@ -8,34 +8,6 @@
 import Foundation
 import SwiftUI
 
-enum ScreenShotTypes {
-    case full
-    case window
-    case area
-    
-    var processArguments: [String] {
-        switch self {
-        case .full:
-            ["-c"]
-        case .window:
-            ["-cw"]
-        case .area:
-            ["-cs"]
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .full:
-            "fullScreen"
-        case .window:
-            "window"
-        case .area:
-            "area"
-        }
-    }
-}
-
 struct MenuBarView: View {
     @State private var imageURL: URL? = nil
     
@@ -55,19 +27,26 @@ struct MenuBarView: View {
             HStack {
                 Button {
                     NSApplication.shared.hide(nil)
-                    takeScreenShot(type: .area)
+                    takeScreenShot(type: .area) { imageURL in
+                        updateimageURL(imageURL)
+                    }
                     NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "rectangle.dashed") }
                 Button {
                     NSApplication.shared.hide(nil)
-                    takeScreenShot(type: .window)
+                    takeScreenShot(type: .window) { imageURL in
+                        updateimageURL(imageURL)
+                    }
                     NSApplication.shared.unhide(nil)
                 } label: { Image(systemName: "macwindow") }
                 Button {
-                    takeScreenShot(type: .full)
+                    takeScreenShot(type: .full) { imageURL in
+                        updateimageURL(imageURL)
+                    }
                 } label: { Image(systemName: "desktopcomputer") }
             }
             .padding(.horizontal)
+            
             Button {
                 NSApplication.shared.terminate(nil)
             } label: {
@@ -78,49 +57,7 @@ struct MenuBarView: View {
         .padding(.vertical)
     }
     
-    private func takeScreenShot(type: ScreenShotTypes) {
-        let task = Process()
-        task.executableURL = URL(fileURLWithPath: "/usr/sbin/screencapture")
-        task.arguments = type.processArguments
-        
-        do {
-            try task.run()
-            task.waitUntilExit()
-            getImageFromPasteboard(type: type)
-        } catch {
-            print(
-                "Could not capture screen. Error: \(error.localizedDescription)"
-            )
-        }
-    }
-    
-    private func getImageFromPasteboard(type: ScreenShotTypes) {
-        guard NSPasteboard.general
-            .canReadItem(withDataConformingToTypes: NSImage.imageTypes) else { return }
-        guard let image = NSImage(pasteboard: NSPasteboard.general) else { return }
-        guard let tiffData = image.tiffRepresentation else { return }
-        guard let bitmapImageRep = NSBitmapImageRep(data: tiffData) else { return }
-        guard let pngData = bitmapImageRep.representation(using: .png, properties: [:]) else { return }
-        
-        let fileName = "screenshot_\(type.description)_at_\(Date()).png"
-        let destinationFolderURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Pictures/ShutterMac")
-        
-        do {
-            try FileManager.default.createDirectory(
-                    at: destinationFolderURL,
-                    withIntermediateDirectories: true,
-                    attributes: nil
-                )
-            try pngData.write(
-                    to: destinationFolderURL
-                        .appendingPathComponent(fileName),
-                    options: .atomic
-                )
-            print("Image saved successfully at \(destinationFolderURL.path) \(fileName)")
-            self.imageURL = destinationFolderURL
-                .appendingPathComponent(fileName)
-        } catch {
-            print("Error saving image: \(error)")
-        }
+    private func updateimageURL(_ url: URL?) {
+        imageURL = url
     }
 }
