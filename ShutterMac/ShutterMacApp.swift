@@ -10,9 +10,11 @@ import SwiftData
 
 @main
 struct ShutterMacApp: App {
+    @StateObject var screenCapture = ScreenCapture()
+    
     var body: some Scene {
         MenuBarExtra {
-            MenuBarView()
+            MenuBarView(screenCapture: screenCapture)
         } label: {
             Image("MenuIcon")
                 .resizable()
