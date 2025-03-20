@@ -1,0 +1,73 @@
+name: Build and upload assets to ShutterMac
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  increment-build-number:
+    if: ${{  contains(github.event.comment.html_url, '/issues') && (github.event.comment.body == '/deploy') && (github.event.issue.state == 'open') && startsWith(github.event.issue.title, 'Deploy') }}
+    name: Increment Build Number
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login Github User
+        run: echo -e "machine github.com\n  login $PERSONAL_ACCESS_TOKEN" >> ~/.netrc
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Clone Repo
+        run: |
+          git clone https://github.com/Bibek99/app-secrets
+          git config --global user.email "${USER_EMAIL}"
+          git config --global user.name "Bibek Basyal"
+          cd app-secrets/shuttermac
+          awk -F, '{printf("%d\n",$1+1)}' OFS=, build.txt >tmp && mv tmp build.txt
+          git add build.txt
+          git commit -m "Increment build number of ShutterMac"
+          git push origin master
+        env:
+          USER_EMAIL: ${{ secrets.USER_EMAIL }}
+
+  build-app:
+    name: Build Mac App
+    needs: [increment-build-number]
+    runs-on: macos-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.2.app/Contents/Developer
+      XCODE_16_DEVELOPER_DIR: /Applications/Xcode_16.2.app/Contents/Developer
+    steps:
+      - name: Login Github User
+        run: |
+          echo -e "machine github.com\n  login $PERSONAL_ACCESS_TOKEN" >> ~/.netrc
+          chmod 600 ~/.netrc
+        env:
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Build from main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - name: Build app
+        run: |
+          npm install -g create-dmg
+          gem install fastlane
+          export BUILD=$(curl --header "Authorization: token $PERSONAL_ACCESS_TOKEN" https://raw.githubusercontent.com/Bibek99/app-secrets/refs/heads/master/shuttermac/build.txt | cat)
+          export VERSION=$(cat version.txt)
+          ./scripts/setup.sh
+          cat ShutterMac/Config.xcconfig
+          ./scripts/build-app.sh || true
+          ls ./build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - name: Tag name
+        run: |
+          appVersion=$(cat version.txt)
+          echo "TAG=${appVersion}" >> $GITHUB_ENV
+      - name: Create release and tag
+        run: |
+          gh release create v${{ env.TAG }} ./build/*.dmg --target main --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
