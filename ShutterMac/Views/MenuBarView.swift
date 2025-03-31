@@ -29,19 +29,31 @@ struct MenuBarView: View {
             HStack {
                 Button {
                     screenCapture.captureFull()
-                } label: { Image(systemName: "desktopcomputer") }
+                } label: {
+                    Image(systemName: "desktopcomputer")
+                    Text("Full Screen")
+                        .font(.caption2)
+                }
                 
                 Button {
                     NSApplication.shared.hide(nil)
                     screenCapture.captureArea()
                     NSApplication.shared.unhide(nil)
-                } label: { Image(systemName: "rectangle.dashed") }
+                } label: {
+                    Image(systemName: "rectangle.dashed")
+                    Text("Area")
+                        .font(.caption2)
+                }
                 
                 Button {
                     NSApplication.shared.hide(nil)
                     screenCapture.captureWindow()
                     NSApplication.shared.unhide(nil)
-                } label: { Image(systemName: "macwindow") }
+                } label: {
+                    Image(systemName: "macwindow")
+                    Text("Window")
+                        .font(.caption2)
+                }
             }
             .padding(.horizontal)
             
